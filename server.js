@@ -5,22 +5,13 @@
      nunca llegan al navegador. */
 
 require('dotenv').config({path: require('path').join(__dirname, '/config', '.env')}); 
-const express = require('express');
 const path = require('path');
+const express = require('express');
 
 const app = express();
 app.use(express.json({ limit: '10kb' }));
-app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 /* ---------- Configuración ---------- */
-app.get('/config', (req, res) => {
-  res.json({
-    conectado: CONECTADO,
-    supabase_url: SUPABASE_URL,
-    supabase_key: SUPABASE_KEY ? '*****' : ''
-  });
-});
-
 const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const SUPABASE_KEY = process.env.SUPABASE_KEY || '';
 const CONECTADO = Boolean(SUPABASE_URL && SUPABASE_KEY);
@@ -68,13 +59,6 @@ async function agregar(tabla, fila) {
 }
 
 /* ---------- Rutas ---------- */
-app.get('/', (req, res) => {
-  const archivo = path.join(__dirname, 'index.html');
-  res.sendFile(archivo, (err) => {
-    if (err) res.status(404).send('No encuentro ' + archivo + '. Revisá que index.html esté dentro de la carpeta public.');
-  });
-});
-
 app.get('/api/asistencias', async (req, res) => {
   try {
     res.set('Cache-Control', 'no-store');
@@ -128,8 +112,13 @@ app.post('/api/musica', async (req, res) => {
 });
 
 /* ---------- Archivos de la página (solo para correr en tu compu) ---------- */
-app.use(express.static(path.join(__dirname, 'public')));
-app.use("/assets", express.static(path.join(__dirname, "assets")));
+// Archivos CSS, imágenes y otros recursos
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+// Página principal
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 /* ---------- Arranque ---------- */
 const PORT = process.env.PORT || 3100;
