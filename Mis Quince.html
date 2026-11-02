@@ -1,0 +1,357 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset=utf8>
+    <meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+    <link rel="stylesheet" href="/assents/css/styles.css">
+    <title>Mis Quince</title>
+    <meta name="claude:viewport-fit-sides" content="cover">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;0,700;1,400&family=Mr+Dafoe&display=swap">
+  </head>
+
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<main class="col">
+  <p class="tag">Cumpleaños de la criaturita</p>
+
+  <!-- Video (antes iba la música) -->
+  <figure class="vid">
+    <video id="vid" src="/assents/imagen/Beautiful Starry Night Galaxy 2023 Planner Book Cover (3).mp4" muted loop playsinline autoplay preload="auto" aria-label="Video de la invitación"></video>
+  </figure>
+
+  <!-- Cuenta regresiva y horarios -->
+  <section class="panel torn p-silver" id="fecha">
+    <p class="eyebrow">Agendá la fecha</p>
+    <h2>Falta poco</h2>
+    <div class="count" id="count" role="timer" aria-label="Tiempo que falta para la fiesta">
+      <div><strong id="cd-d">0</strong><span>Días</span></div>
+      <div><strong id="cd-h">00</strong><span>Horas</span></div>
+      <div><strong id="cd-m">00</strong><span>Min</span></div>
+      <div><strong id="cd-s">00</strong><span>Seg</span></div>
+    </div>
+    <ul class="horas">
+      <li><span>Ingreso de la quinceañera</span><b>22:00 h</b></li>
+      <li><span>Cierre de la fiesta</span><b>05:00 h</b></li>
+    </ul>
+  </section>
+
+  <!-- Cómo llegar -->
+  <section class="panel torn p-silver" id="llegar">
+    <p class="eyebrow">Cómo llegar</p>
+    <div class="venue">Salón Chacra Mi Negrita</div>
+    <p class="muted">Camino la Aviación, continuación de calle Luis Alberto Herrera</p>
+    <img src="/assents/imagen/Mapa.png" alt="Mapa de ubicación del salón de fiestas">
+    <a class="btn" href="https://maps.app.goo.gl/DxLRBteC82N78sK68" target="_blank" rel="noopener">Abrir en Google Maps</a>
+  </section>
+
+  <!-- Vestimenta -->
+  <section class="panel torn p-silver" id="vestimenta">
+    <p class="eyebrow">Código de vestimenta</p>
+    <h2>Elegante</h2>
+    <p class="muted">Traje, vestido largo o de coctel.</p>
+    <div class="swatches" role="list" aria-label="Colores sugeridos">
+    </div>
+    <p style="margin:0">Te pedimos evitar el <b> azul</b>.</p><p> Color reservado para la quienciañera.</p>
+  </section>
+
+  <!-- Regalo -->
+  <section class="panel torn p-silver" id="regalo">
+    <p class="eyebrow">Sugerencia de regalo</p>
+    <h2>Tu presencia es lo más lindo</h2>
+    <p class="muted">Si deseas hacerme un regalo, te dejo esta opción.</p>
+    <ul class="gifts">
+      <li>
+        <h3>PREX</h3>
+        <p class="muted">Podés transferir a mi cuenta o deposito por Abitab.</p>
+        <p class="muted"><b>NºCuenta:</b> <span id="alias">23498108</span> <button class="btn-copy" id="copiar" type="button">Copiar</button></p>
+        <p class="muted"><b>CI:</b> <span id="alias">59433901</span></p>
+        <p class="muted">Fernada Reyes</p>
+    </ul>
+  </section>
+
+  <!-- Confirmación -->
+  <section class="panel torn p-silver" id="confirmar">
+    <p class="eyebrow">¿Venís?</p>
+    <h2>Confirmación de asistencia</h2>
+    <p class="limite">Confirmá antes del <b>27 de noviembre de 2026</b></p>
+    <form id="rsvp" autocomplete="off">
+      <label for="nombre">Tu nombre
+        <input id="nombre" name="nombre" type="text" maxlength="60" required placeholder="Nombre y apellido">
+      </label>
+      <label for="vienen">Respuesta
+        <select id="vienen" name="vienen">
+          <option value="si">Sí, voy</option>
+          <option value="no">No puedo ir</option>
+        </select>
+      </label>
+      <button class="btn" id="enviar" type="submit">Confirmar</button>
+      <p class="msg" id="msg" role="status"></p>
+      <p class="modo" id="modo"></p>
+    </form>
+
+    <div class="resumen"><strong id="tot">0</strong><span id="tot-label">confirmados</span></div>
+    <ul class="list" id="lista"></ul>
+    <p class="vacio" id="vacio">Todavía no hay confirmaciones. La primera aparece acá apenas alguien responda.</p>
+  </section>
+
+  <!-- Alojamiento -->
+  <section class="panel torn p-silver" id="alojamiento">
+    <p class="eyebrow">Alojamiento</p>
+    <h2>Dónde quedarte</h2>
+    <p class="muted">Si venís de otra ciudad, te dejo estas opciones.</p>
+    <ul class="gifts">
+      <li>
+        <h3>Casitas de Piedra</h3>
+        <p class="muted">Casa para 2,4,5 y hasta 7 personas.</p>
+        <div class="meta"><span><b>Desde</b> USD 60 por noche</span><span><b>Reservas al:</b> 099 102 500 </span></div>
+      </li>
+      <li>
+        <h3>Trinidad Inn</h3>
+        <p class="muted">Habitaciones con baños privados.</p>
+        <div class="meta"><span><b>Desde</b> 1 persona... $1850 </span><span><b>Reservas al:</b> 099 969 714</span></div>
+        <div class="meta"><span><b>Desde</b> 2 persona... $2500 </span></div>
+        <div class="meta"><span><b>Desde</b> 3 persona... $3000 </span></div>
+      </li>
+      <li>
+        <h3>Hoteles</h3>
+        <p class="muted">Contactos.</p>
+        <div class="meta"><span><b>Hotel Maxim:</b> 099 920 748</span></div>
+        <div class="meta"><span><b>Hotel Moyano:</b> 099 505 880</span></div>
+        <div class="meta"><span><b>Hotel Trinidad:</b> 091 777 973 / 4364 2307</span></div>
+      </li>
+    </ul>
+    <p class="muted" style="margin:16px 0 0">Conviene reservar con tiempo, porque esa semana suele haber mucha ocupación.</p>
+  </section>
+  <!-- Música -->
+<section class="panel torn p-silver" id="musica">
+  <p class="eyebrow">Música</p>
+  <h2>Armemos la Playlist juntos</h2>
+  <p class="muted">¿Qué canción no puede faltar en la fiesta?</p>
+  <form id="musica-form" autocomplete="off">
+    <label for="cancion">Nombre de la canción
+      <input id="cancion" name="cancion" type="text" maxlength="80" required placeholder="Nombre de la canción">
+    </label>
+    <button class="btn" type="submit">Sugerir</button>
+    <p class="msg" id="musica-msg" role="status"></p>
+  </form>
+  <ul class="list" id="musica-lista"></ul>
+</section>
+
+  <footer>© Creado por Franyes Coporations.</footer>
+</main>
+
+<script>
+(function(){
+  var reduce=false;
+  try{reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+  function rnd(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+
+  /* ---------- Cielo estrellado ---------- */
+  var sky=document.getElementById('sky'),sctx=sky.getContext('2d');
+  var stars=[],sparks=[];
+  for(var i=0;i<150;i++){stars.push({x:rnd(i+1),y:rnd(i+400),r:.4+rnd(i+900)*1.3,p:rnd(i+1500)*6.28,v:.6+rnd(i+2000)*1.6});}
+  for(var k=0;k<7;k++){sparks.push({x:.08+rnd(k+3000)*.84,y:.05+rnd(k+3100)*.9,s:7+rnd(k+3200)*9,p:rnd(k+3300)*6.28});}
+  var W=0,H=0,dpr=1;
+  function sizeSky(){
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;
+    sky.width=W*dpr;sky.height=H*dpr;sctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function spark(x,y,s,a){
+    sctx.globalAlpha=a;sctx.fillStyle='#fff';sctx.beginPath();
+    sctx.moveTo(x,y-s);sctx.quadraticCurveTo(x,y,x+s,y);sctx.quadraticCurveTo(x,y,x,y+s);
+    sctx.quadraticCurveTo(x,y,x-s,y);sctx.quadraticCurveTo(x,y,x,y-s);sctx.fill();
+  }
+  function drawSky(t){
+    sctx.clearRect(0,0,W,H);
+    stars.forEach(function(s){
+      var a=reduce?.7:.45+.45*Math.sin(t*s.v+s.p);
+      sctx.globalAlpha=Math.max(.08,a);sctx.fillStyle='#fff';
+      sctx.beginPath();sctx.arc(s.x*W,s.y*H,s.r,0,6.283);sctx.fill();
+    });
+    sparks.forEach(function(s){
+      var a=reduce?.8:.35+.6*Math.abs(Math.sin(t*.7+s.p));
+      spark(s.x*W,s.y*H,s.s,a);
+    });
+    sctx.globalAlpha=1;
+  }
+  sizeSky();drawSky(0);
+  window.addEventListener('resize',function(){sizeSky();drawSky(performance.now()/1000);});
+  if(!reduce){
+    (function loop(ts){drawSky(ts/1000);requestAnimationFrame(loop);})(0);
+  }
+
+  /* ---------- Bordes rasgados ---------- */
+  function tornPolygon(el,seed){
+    var w=el.offsetWidth,h=el.offsetHeight,step=13,pts=[],i=0,arch=el.classList.contains('arch');
+    if(!w||!h)return;
+    function j(){i++;return 2+rnd(seed*57+i)*8;}
+    function pt(x,y){pts.push(x.toFixed(1)+'px '+y.toFixed(1)+'px');}
+    var startY=0,n,k;
+    if(arch){
+      var rx=w/2,ry=Math.min(rx,220);
+      n=Math.max(24,Math.round(Math.PI*rx/step));
+      for(k=0;k<=n;k++){var th=Math.PI-Math.PI*k/n,jj=j();pt(rx+(rx-jj)*Math.cos(th),ry-(ry-jj)*Math.sin(th));}
+      startY=ry;
+    }else{
+      n=Math.max(4,Math.round(w/step));
+      for(k=0;k<=n;k++)pt(w*k/n,j());
+    }
+    n=Math.max(2,Math.round((h-startY)/step));
+    for(k=1;k<=n;k++)pt(w-j(),startY+(h-startY)*k/n);
+    n=Math.max(4,Math.round(w/step));
+    for(k=1;k<=n;k++)pt(w-w*k/n,h-j());
+    n=Math.max(2,Math.round((h-startY)/step));
+    for(k=1;k<n;k++)pt(j(),h-(h-startY)*k/n);
+    el.style.clipPath='polygon('+pts.join(',')+')';
+  }
+  document.querySelectorAll('.torn').forEach(function(el,ix){
+    var run=function(){tornPolygon(el,ix+1);};
+    run();
+    if(window.ResizeObserver){new ResizeObserver(run).observe(el);}
+    else{window.addEventListener('resize',run);}
+  });
+
+  /* ---------- Video ---------- */
+  var vid=document.getElementById('vid');
+  if(reduce){vid.removeAttribute('autoplay');vid.pause();}
+  vid.addEventListener('click',function(){if(vid.paused){vid.play().catch(function(){});}else{vid.pause();}});
+
+  /* ---------- Cuenta regresiva ---------- */
+  var TARGET=new Date('2026-12-12T21:00:00-03:00').getTime();
+  var cd={d:document.getElementById('cd-d'),h:document.getElementById('cd-h'),m:document.getElementById('cd-m'),s:document.getElementById('cd-s')};
+  function pad(n){return String(n).padStart(2,'0');}
+  var timer;
+  function tick(){
+    var left=TARGET-Date.now();
+    if(left<=0){document.getElementById('count').innerHTML='<div class="done">¡Hoy es la fiesta!</div>';clearInterval(timer);return;}
+    var s=Math.floor(left/1000);
+    cd.d.textContent=Math.floor(s/86400);
+    cd.h.textContent=pad(Math.floor(s%86400/3600));
+    cd.m.textContent=pad(Math.floor(s%3600/60));
+    cd.s.textContent=pad(s%60);
+  }
+  timer=setInterval(tick,1000);tick();
+
+  /* ---------- Copiar alias ---------- */
+  document.getElementById('copiar').addEventListener('click',function(){
+    var b=this,a=document.getElementById('alias');
+    function ok(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar';},1800);}
+    function fallback(){
+      var r=document.createRange();r.selectNodeContents(a);
+      var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+      b.textContent='Seleccionado';setTimeout(function(){b.textContent='Copiar';},1800);
+    }
+    try{navigator.clipboard.writeText(a.textContent).then(ok,fallback);}catch(e){fallback();}
+  });
+
+  /* ---------- Asistencias ---------- */
+  var rows=[],db=null,uid=null;
+  var form=document.getElementById('rsvp'),msg=document.getElementById('msg'),modo=document.getElementById('modo');
+  var LS='quince-rsvp-demo';
+  function say(t){msg.textContent=t;}
+
+  function render(){
+    var ul=document.getElementById('lista');ul.textContent='';
+    var total=0;
+    rows.forEach(function(r){
+      if(r.going)total+=1;
+      var li=document.createElement('li'),left=document.createElement('div');
+      var name=document.createElement('span');name.textContent=r.name;left.appendChild(name);
+      var chip=document.createElement('span');chip.className='chip'+(r.going?'':' no');chip.textContent=r.going?'Va':'No va';
+      li.appendChild(left);li.appendChild(chip);ul.appendChild(li);
+    });
+    document.getElementById('tot').textContent=total;
+    document.getElementById('tot-label').textContent=total===1?'confirmado':'confirmados';
+    document.getElementById('vacio').hidden=rows.length>0;
+  }
+  function fromDoc(id,d){
+    return {id:id,name:String(d.name||''),going:!!d.going,count:Math.max(1,Math.min(6,Number(d.count)||1)),note:String(d.note||''),at:Number(d.at)||0};
+  }
+  function loadLocal(){try{var raw=localStorage.getItem(LS);if(raw){rows=JSON.parse(raw).map(function(r){return fromDoc(r.id,r);});}}catch(e){}}
+  function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(rows));}catch(e){}}
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=document.getElementById('nombre').value.trim();
+    if(!name){say('Escribí tu nombre para confirmar.');return;}
+    var going=document.getElementById('vienen').value==='si';
+    var rec={name:name,going:going,count:1,note:'',at:Date.now()};
+    var b=document.getElementById('enviar');b.disabled=true;
+    if(db&&uid){
+      db.doc('rsvps/'+uid).set(rec).then(function(){
+        say(going?'¡Listo! Te esperamos.':'Gracias por avisar.');
+      }).catch(function(){
+        say('No se pudo guardar tu respuesta. Probá de nuevo en un rato.');
+      }).then(function(){b.disabled=false;});
+    }else{
+      rows=rows.filter(function(r){return r.name.toLowerCase()!==name.toLowerCase();});
+      rows.unshift(fromDoc('local-'+rec.at,rec));
+      saveLocal();render();
+      say(going?'¡Listo! Te esperamos.':'Gracias por avisar.');
+      b.disabled=false;
+    }
+  });
+
+  loadLocal();render();
+  modo.textContent='Modo de prueba: las respuestas se guardan solo en este navegador.';
+
+  (async function(){
+    try{
+      if(!window.claude||!window.claude.use)return;
+      var pair=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
+      var d=pair[0],u=pair[1];
+      if(!d||!u)return;
+      var id=await u.id();
+      var can=await u.can('data.write');
+      if(!id||can===false)return;
+      db=d;uid=id;rows=[];render();
+      modo.textContent='Las confirmaciones se comparten con todos los invitados.';
+      var slow=setTimeout(function(){modo.textContent='Todavía no se pudo conectar con la lista. Puede estar desactualizada.';},10000);
+      db.collection('rsvps').orderBy('at','desc').onSnapshot(function(snap){
+        if(!snap.metadata.fromCache)clearTimeout(slow);
+        rows=snap.docs.map(function(x){return fromDoc(x.id,x.data()||{});});
+        render();
+        var mine=rows.filter(function(r){return r.id===uid;})[0];
+        var n=document.getElementById('nombre');
+        if(mine&&!n.value){
+          n.value=mine.name;
+          document.getElementById('vienen').value=mine.going?'si':'no';
+        }
+      },function(){
+        clearTimeout(slow);db=null;uid=null;loadLocal();render();
+        modo.textContent='No se pudo leer la lista compartida. Modo de prueba en este navegador.';
+      });
+    }catch(e){}
+  })();
+})();
+/* ---------- Sugerencias de música ---------- */
+var songs=[];
+var mForm=document.getElementById('musica-form'),
+    mMsg=document.getElementById('musica-msg'),
+    mList=document.getElementById('musica-lista');
+try{songs=JSON.parse(localStorage.getItem('quince-musica'))||[];}catch(e){songs=[];}
+function renderSongs(){
+  mList.textContent='';
+  songs.forEach(function(t){
+    var li=document.createElement('li'),s=document.createElement('span');
+    s.textContent=t;li.appendChild(s);mList.appendChild(li);
+  });
+}
+mForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  var inp=document.getElementById('cancion'),t=inp.value.trim();
+  if(!t){mMsg.textContent='Escribí el nombre de la canción.';return;}
+  songs.unshift(t);
+  try{localStorage.setItem('quince-musica',JSON.stringify(songs));}catch(e){}
+  renderSongs();inp.value='';
+  mMsg.textContent='¡Gracias! Anotamos tu sugerencia.';
+});
+renderSongs();
+</script>
+
+</body>
+</html>
