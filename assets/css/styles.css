@@ -140,3 +140,104 @@ footer{text-align:center;font-size:13px;color:var(--muted)}
   .tips li{grid-template-columns:1fr;gap:2px}
   .panel{padding-inline:20px}
 }
+
+/* ===== Carta de entrada ===== */
+:root{ --oro-1:#F8E7B0; --oro-2:#E3B955; --oro-3:#A8751F; }
+
+/* La página principal queda oculta hasta abrir el sobre */
+.col{transition:opacity .9s ease,transform .9s ease}
+body.intro-activa{overflow:hidden}
+html:has(body.intro-activa){overflow:hidden}
+body.intro-activa .col{opacity:0;transform:translateY(14px);pointer-events:none}
+
+.intro{position:fixed;inset:0;z-index:100;overflow-x:hidden;overflow-y:auto;transition:opacity .9s ease}
+.intro.saliendo{opacity:0;pointer-events:none}
+.intro-marco{position:relative;max-width:460px;min-height:100vh;min-height:100dvh;margin:0 auto}
+
+/* Cielo: luna, nubes, polvo y chispas doradas */
+.intro-cielo{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.luna{position:absolute;left:-3%;top:0;width:28%;max-width:130px;height:auto;transform:rotate(-12deg);filter:drop-shadow(0 0 14px rgba(255,214,120,.55))}
+.polvo{position:absolute;right:-4%;top:1.5%;width:68%;height:auto;filter:drop-shadow(0 0 5px rgba(255,220,130,.7))}
+.nube{position:absolute;border-radius:50%;filter:blur(7px);background:radial-gradient(ellipse at 50% 40%,rgba(70,85,200,.55),rgba(25,32,120,.35) 55%,transparent 72%)}
+.nube.n1{left:-8%;top:11%;width:58%;height:11%}
+.nube.n2{left:-14%;top:42%;width:70%;height:13%}
+.nube.n3{right:-16%;bottom:13%;width:74%;height:14%}
+.nube.n4{left:-8%;bottom:1%;width:52%;height:15%}
+.chispa{
+  position:absolute;width:var(--t);height:var(--t);
+  background:radial-gradient(circle,#fff 0 18%,var(--oro-1) 40%,var(--oro-2) 100%);
+  clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);
+  animation:brilla var(--d) ease-in-out infinite;animation-delay:var(--r);
+}
+@keyframes brilla{0%,100%{opacity:.35;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+
+/* Contenido */
+.intro-contenido{
+  position:relative;z-index:2;min-height:inherit;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:20px;text-align:center;
+  padding:clamp(40px,8vh,80px) max(24px,env(safe-area-inset-right,0px)) clamp(36px,7vh,64px) max(24px,env(safe-area-inset-left,0px));
+}
+.intro-kicker{margin:0;font:600 clamp(13px,3.6vw,16px)/1.4 var(--body);letter-spacing:.34em;text-transform:uppercase;color:var(--oro-1);padding-left:.34em}
+.orna{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px auto 0;width:min(60%,210px)}
+.orna::before,.orna::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--oro-2))}
+.orna::after{background:linear-gradient(270deg,transparent,var(--oro-2))}
+.orna i{width:7px;height:7px;background:var(--oro-1);transform:rotate(45deg);box-shadow:0 0 8px rgba(248,231,176,.8)}
+.intro-nombre{
+  margin:6px 0 0;padding-bottom:.08em;font:400 clamp(60px,21vw,108px)/1.05 var(--script);
+  color:var(--oro-2);
+  background:linear-gradient(180deg,#FFF1BE 0%,#E9BF5A 45%,#B98124 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 14px rgba(240,200,110,.4));
+}
+
+/* Sobre */
+.sobre{display:block;width:min(80vw,350px);padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;font:inherit;color:inherit}
+.sobre:focus-visible{outline:3px solid var(--oro-1);outline-offset:10px}
+.sobre-caja{position:relative;display:block;aspect-ratio:3/2;perspective:900px;animation:flota 4.5s ease-in-out infinite}
+.sobre-caja::after{content:"";position:absolute;left:8%;right:8%;bottom:-14%;height:12%;background:radial-gradient(ellipse,rgba(0,0,0,.55),transparent 70%);filter:blur(6px);z-index:0}
+.sobre-caja>*{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sobre-caja svg{filter:drop-shadow(0 0 2px rgba(227,185,85,.5))}
+.s-fondo{z-index:1}
+.sobre-caja>.s-carta{
+  z-index:2;inset:9% 9% 10% 9%;width:auto;height:auto;display:flex;justify-content:center;align-items:flex-start;padding-top:9%;
+  background:radial-gradient(circle at 25% 8%,rgba(255,255,255,.4),transparent 55%),linear-gradient(180deg,#B2BBD7,#8A95BA);
+  box-shadow:0 0 0 1px rgba(227,185,85,.6);
+}
+.s-carta b{font:400 clamp(26px,8vw,38px)/1.1 var(--script);color:#0B0E4A}
+.s-frente{z-index:3}
+.s-solapa{z-index:4;transform-origin:50% 0}
+.sobre-caja>.s-sello{
+  z-index:5;inset:auto;left:50%;top:59%;width:19%;height:auto;aspect-ratio:1;translate:-50% -50%;
+  filter:drop-shadow(0 0 8px rgba(255,214,120,.8));animation:late 2.4s ease-in-out infinite;
+}
+.s-sello svg{display:block;width:100%;height:100%;filter:none}
+@keyframes flota{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes late{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+/* Texto de abajo */
+.intro-pie{display:grid;gap:6px;justify-items:center;width:100%}
+.intro-pie strong{font:italic 400 clamp(20px,5.6vw,26px)/1.2 var(--body);color:var(--oro-1)}
+.intro-pie span{font:500 clamp(11px,3.2vw,14px)/1.4 var(--body);letter-spacing:.14em;color:var(--silver)}
+.intro-pie .orna{width:min(78%,320px);margin-top:8px}
+
+/* Al abrir */
+.intro.abierto .sobre{cursor:default}
+.intro.abierto .sobre-caja{animation:none}
+.intro.abierto .s-sello{animation:sello-rompe .5s ease forwards}
+.intro.abierto .s-solapa{animation:solapa .8s .25s ease-in-out forwards}
+.intro.abierto .s-carta{transform:translateY(-72%);transition:transform .9s .85s cubic-bezier(.2,.7,.2,1)}
+.intro-top,.intro-pie{transition:opacity .6s .3s ease}
+.intro.abierto .intro-top,.intro.abierto .intro-pie{opacity:0}
+@keyframes solapa{
+  0%{transform:rotateX(0);z-index:4}
+  50%{transform:rotateX(90deg);z-index:4}
+  51%{z-index:1}
+  100%{transform:rotateX(180deg);z-index:1}
+}
+@keyframes sello-rompe{0%{transform:scale(1)}30%{transform:scale(1.18)}100%{transform:scale(.4);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .sobre-caja,.sobre-caja>.s-sello,.chispa{animation:none!important}
+  .intro.abierto .s-solapa{animation:none;transform:rotateX(180deg);z-index:1}
+  .intro.abierto .s-sello{animation:none;opacity:0}
+  .intro.abierto .s-carta{transition:none}
+}

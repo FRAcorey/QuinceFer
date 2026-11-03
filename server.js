@@ -4,7 +4,7 @@
    - Guarda las asistencias y las canciones en Supabase. Las claves quedan en el servidor,
      nunca llegan al navegador. */
 
-require('dotenv').config({path: require('path').join(__dirname, '/config', '.env')}); 
+require('dotenv').config({path: require('path').join(__dirname, '/config', '.env')});
 const path = require('path');
 const express = require('express');
 
@@ -14,58 +14,61 @@ app.use(express.json({ limit: '10kb' }));
 /* ---------- Configuración ---------- */
 const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const SUPABASE_KEY = process.env.SUPABASE_KEY || '';
-const CONECTADO = Boolean(SUPABASE_URL && SUPABASE_KEY);
-
-/* Si no hay claves, funciona en modo de prueba: guarda en memoria y se borra al reiniciar. */
-const memoria = { asistencias: [], musica: [] };
-if (!CONECTADO) {
-  console.warn('Sin SUPABASE_URL / SUPABASE_KEY: modo de prueba, los datos se guardan en memoria.');
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  console.error('Falta SUPABASE_URL o SUPABASE_KEY. Revisá config/.env (o las variables de Vercel).');
 }
 
 /* ---------- Acceso a Supabase (REST, sin librerías) ---------- */
 function supabase(ruta, opciones = {}) {
-  return fetch(`${SUPABASE_URL}/rest/v1/${ruta}`, {
-    ...opciones,
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
-      ...opciones.headers
-    }
-  });
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    throw new Error('Falta configurar SUPABASE_URL y SUPABASE_KEY.');
+  }
+  const headers = {
+    apikey: SUPABASE_KEY,
+    'Content-Type': 'application/json',
+    Prefer: 'return=minimal',
+    ...opciones.headers
+  };
+  // Las claves nuevas (sb_publishable_... / sb_secret_...) se mandan solo en "apikey".
+  // Las claves viejas (empiezan con "eyJ") también se mandan como Bearer.
+  if (SUPABASE_KEY.startsWith('eyJ')) headers.Authorization = `Bearer ${SUPABASE_KEY}`;
+  return fetch(`${SUPABASE_URL}/rest/v1/${ruta}`, { ...opciones, headers });
+}
+
+/* Si Supabase responde con error, lo muestra completo en la terminal */
+async function revisar(r, accion) {
+  if (r.ok) return;
+  const detalle = await r.text();
+  throw new Error(`${accion}: Supabase respondió ${r.status} ${detalle}`);
 }
 
 async function listar(tabla, campos, limite) {
-  if (!CONECTADO) return memoria[tabla].slice(0, limite);
   const r = await supabase(`${tabla}?select=${campos}&order=creado_en.desc&limit=${limite}`);
-  if (!r.ok) throw new Error(`No se pudo leer ${tabla}`);
+  await revisar(r, `Leer ${tabla}`);
   return r.json();
 }
 
 /* Devuelve 'ok' o 'duplicado' */
 async function agregar(tabla, fila) {
-  if (!CONECTADO) {
-    const repetido = tabla === 'asistencias' &&
-      memoria.asistencias.some((x) => x.nombre.toLowerCase() === fila.nombre.toLowerCase());
-    if (repetido) return 'duplicado';
-    memoria[tabla].unshift(fila);
-    return 'ok';
-  }
   const r = await supabase(tabla, { method: 'POST', body: JSON.stringify(fila) });
   if (r.status === 409) return 'duplicado'; // el nombre ya existe (restricción única de la tabla)
-  if (!r.ok) throw new Error(`No se pudo guardar en ${tabla}`);
+  await revisar(r, `Guardar en ${tabla}`);
   return 'ok';
+}
+
+function fallo(res, e, mensaje) {
+  console.error(e.message, e.cause ? `(${e.cause.code || e.cause.message})` : '');
+  res.status(500).json({ error: mensaje });
 }
 
 /* ---------- Rutas ---------- */
 app.get('/api/asistencias', async (req, res) => {
   try {
     res.set('Cache-Control', 'no-store');
-    res.json(await listar('asistencias', 'nombre,va', 200));
+    const filas = await listar('asistencias', 'va', 1000);
+    res.json({ total: filas.filter((f) => f.va).length });
   } catch (e) {
-    console.error(e.message);
-    res.status(500).json({ error: 'No se pudo leer la lista.' });
+    fallo(res, e, 'No se pudo leer el total.');
   }
 });
 
@@ -82,8 +85,7 @@ app.post('/api/asistencias', async (req, res) => {
     }
     res.status(201).json({ ok: true });
   } catch (e) {
-    console.error(e.message);
-    res.status(500).json({ error: 'No se pudo guardar tu respuesta.' });
+    fallo(res, e, 'No se pudo guardar tu respuesta.');
   }
 });
 
@@ -92,8 +94,7 @@ app.get('/api/musica', async (req, res) => {
     res.set('Cache-Control', 'no-store');
     res.json(await listar('musica', 'cancion', 100));
   } catch (e) {
-    console.error(e.message);
-    res.status(500).json({ error: 'No se pudo leer la lista.' });
+    fallo(res, e, 'No se pudo leer la lista.');
   }
 });
 
@@ -106,8 +107,7 @@ app.post('/api/musica', async (req, res) => {
     await agregar('musica', { cancion });
     res.status(201).json({ ok: true });
   } catch (e) {
-    console.error(e.message);
-    res.status(500).json({ error: 'No se pudo guardar la canción.' });
+    fallo(res, e, 'No se pudo guardar la canción.');
   }
 });
 
