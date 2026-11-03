@@ -10,6 +10,12 @@ const express = require('express');
 
 const app = express();
 app.use(express.json({ limit: '10kb' }));
+app.get('/api/prueba', (req, res) => {
+  res.json({
+    mensaje: 'Express funciona en Vercel',
+    estado: 'OK'
+  });
+});
 
 /* ---------- Configuración ---------- */
 const SUPABASE_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
