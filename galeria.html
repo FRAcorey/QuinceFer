@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Galería · Mis Quince</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/galeria.css">
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<main class="col">
+
+  <a class="volver" href="/">← Volver a la invitación</a>
+
+  <!-- Subir fotos -->
+  <section class="panel torn p-silver" id="subir">
+    <p class="eyebrow">Galería</p>
+    <h2>Compartí tus fotos</h2>
+    <p class="muted">Subí las fotos que sacaste en la fiesta para que todos las veamos.</p>
+    <form id="subir-form" autocomplete="off">
+      <label class="zona" id="zona" for="archivos">
+        <input class="solo-lector" id="archivos" type="file" accept="image/*" multiple>
+        <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 16a4 4 0 0 1 4-4h5l3-4h12l3 4h5a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/>
+          <circle cx="24" cy="25" r="7.5"/>
+        </svg>
+        <strong>Elegir fotos</strong>
+        <small>o arrastralas hasta acá · hasta 10 por vez</small>
+      </label>
+      <ul class="subidas" id="subidas" aria-live="polite"></ul>
+      <button class="btn" id="subir-btn" type="submit" disabled>Subir fotos</button>
+      <p class="msg" id="subir-msg" role="status"></p>
+    </form>
+  </section>
+
+  <!-- Fotos -->
+  <section class="fotos" id="fotos">
+    <p class="eyebrow">Recuerdos</p>
+    <h2>Todas las fotos <span class="cuenta" id="cuenta"></span></h2>
+    <div class="grilla" id="grilla"></div>
+    <p class="vacio-g" id="vacio" hidden>Todavía no hay fotos. ¡Subí la primera!</p>
+    <p class="msg" id="galeria-msg" role="status"></p>
+    <button class="btn" id="mas" type="button" hidden>Ver más fotos</button>
+  </section>
+
+</main>
+
+<!-- Visor de fotos -->
+<dialog class="visor" id="visor" aria-label="Visor de fotos">
+  <div class="visor-marco" id="visor-marco">
+    <button class="v-btn v-cerrar" id="v-cerrar" type="button" aria-label="Cerrar">✕</button>
+    <div class="visor-foto" id="visor-foto">
+      <button class="v-btn v-prev" id="v-prev" type="button" aria-label="Foto anterior">‹</button>
+      <img id="v-img" alt="">
+      <button class="v-btn v-next" id="v-next" type="button" aria-label="Foto siguiente">›</button>
+    </div>
+    <div class="visor-pie">
+      <span id="v-num"></span>
+      <a id="v-desc" href="#" download>Descargar</a>
+    </div>
+  </div>
+</dialog>
+
+<script src="assets/js/galeria.js"></script>
+</body>
+</html>

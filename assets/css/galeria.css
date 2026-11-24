@@ -1,0 +1,87 @@
+/* Galería — se usa junto con styles.css (mismo cielo, mismos papeles plateados). */
+
+[hidden]{display:none!important}
+
+.volver{
+  justify-self:start;color:var(--silver);font:600 14px var(--body);letter-spacing:.06em;
+  text-decoration:none;padding:6px 0;border-bottom:1px solid var(--line);
+}
+.volver:hover{color:var(--star)}
+
+/* Zona para elegir / arrastrar fotos */
+.solo-lector{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0}
+.zona{
+  display:grid;gap:6px;justify-items:center;text-align:center;padding:28px 16px;cursor:pointer;
+  border:2px dashed var(--silver);background:rgba(255,255,255,.28);color:var(--star);
+  transition:background .2s,border-color .2s;
+}
+.zona:hover,.zona.encima{background:rgba(255,255,255,.55)}
+.zona.encima{border-style:solid}
+.zona:focus-within{outline:3px solid var(--glow);outline-offset:3px}
+.zona strong{font:700 18px var(--body)}
+.zona small{font:400 13px var(--body);color:var(--muted)}
+
+/* Lista de fotos que se están por subir */
+.subidas{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.subidas:empty{display:none}
+.subidas li{
+  display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;
+  padding:8px;background:rgba(255,255,255,.35);border:1px solid var(--line);
+}
+.subidas img{width:56px;height:56px;object-fit:cover;display:block;background:var(--chip-bg)}
+.subidas .info{min-width:0}
+.subidas .nom{font:600 14px var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.subidas .est{font-size:13px;color:var(--muted)}
+.subidas li.ok .est{color:#0F5A2A;font-weight:600}
+.subidas li.error .est{color:#8A1230;font-weight:600}
+.barra{height:6px;margin-top:6px;background:rgba(11,14,74,.2);overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1E2790,#3A46C8);transition:width .2s}
+.subidas .quitar{
+  width:32px;height:32px;padding:0;border:1px solid var(--silver);background:transparent;
+  color:var(--star);font:700 14px var(--body);cursor:pointer;
+}
+.subidas li:not(.espera):not(.error) .quitar{visibility:hidden}
+
+/* Fotos */
+.fotos{display:grid;gap:0;text-align:center}
+.fotos h2{margin:8px 0 22px}
+.cuenta{display:block;margin-top:6px;font:600 14px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--silver)}
+.grilla{columns:2;column-gap:12px;text-align:left}
+.foto{
+  display:block;width:100%;margin:0 0 12px;padding:6px;border:0;cursor:zoom-in;break-inside:avoid;
+  background:linear-gradient(180deg,#B2BBD7,#8A95BA);box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+.foto img{display:block;width:100%;height:auto;background:var(--night-2);opacity:0;transition:opacity .45s}
+.foto img.listo{opacity:1}
+.vacio-g{margin:0;padding:24px 0;color:var(--muted)}
+.fotos .msg{color:var(--glow)}
+#mas{justify-self:center;margin-top:18px;background:var(--btn-bg)}
+
+/* Visor */
+dialog.visor{
+  border:0;padding:0;margin:0;background:transparent;color:#fff;
+  width:100vw;max-width:100vw;height:100vh;height:100dvh;max-height:100dvh;
+}
+dialog.visor::backdrop{background:rgba(2,3,18,.98)}
+.visor-marco{position:relative;width:100%;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:10px;padding:60px 12px 14px}
+.visor-foto{position:relative;min-height:0;display:grid;place-items:center}
+.visor-foto img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;box-shadow:0 0 44px rgba(110,130,255,.3)}
+.visor-pie{display:flex;justify-content:center;gap:22px;align-items:center;font:600 14px var(--body);letter-spacing:.08em;color:#C9CFE6}
+.visor-pie a{color:#E8DCA8}
+.v-btn{
+  width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+  background:rgba(6,8,44,.85);color:#fff;font:400 24px/1 var(--body);cursor:pointer;
+  display:grid;place-items:center;padding:0;
+}
+.v-btn:hover{background:rgba(30,39,144,.9)}
+.v-cerrar{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:12px;font-size:18px;z-index:2}
+.v-prev,.v-next{position:absolute;top:50%;translate:0 -50%;z-index:2}
+.v-prev{left:2px}
+.v-next{right:2px}
+
+@media (min-width:560px){
+  .grilla{columns:3}
+}
+@media (prefers-reduced-motion:reduce){
+  .foto img,.zona,.barra i{transition:none}
+}
